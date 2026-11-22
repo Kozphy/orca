@@ -1,0 +1,41 @@
+name: Sync fork
+
+on:
+  # GitHub Actions schedules use UTC; 01:00 UTC is 09:00 in Taiwan (UTC+8).
+  schedule:
+    - cron: '0 1 * * *'
+  # Allow maintainers to sync the fork on demand as well.
+  workflow_dispatch:
+
+# The workflow only advances the fork's main branch; it never creates commits.
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-fork-main
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      # Start from the latest origin/main, not only the revision that triggered the run.
+      - name: Checkout fork main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Fast-forward fork main from upstream
+        run: |
+          set -euo pipefail
+
+          # Fetch both sides explicitly so the workflow does not depend on runner remotes.
+          git remote add upstream https://github.com/stablyai/orca.git
+          git fetch origin main
+          git fetch upstream main
+
+          # Refuse to overwrite either fork-only commits or a divergent upstream history.
+          git merge --ff-only origin/main
+          git merge --ff-only upstream/main
+          git push origin main
