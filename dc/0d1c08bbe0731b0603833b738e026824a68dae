@@ -1,0 +1,19 @@
+.github/workflows/sync-fork.yml
+  s_f869382b35e244::t_96ac691842d8af 1-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dc0d1c08bbe0731b0603833b738e026824a68dae",
+  "prompts": {},
+  "sessions": {
+    "s_f869382b35e244": {
+      "agent_id": {
+        "tool": "github-copilot-cli",
+        "id": "8249ef77-6a59-4f2c-819b-bd3b320edbe5",
+        "model": "unknown"
+      },
+      "human_author": "Zixsa <dbdf0147@gmail.com>"
+    }
+  }
+}
